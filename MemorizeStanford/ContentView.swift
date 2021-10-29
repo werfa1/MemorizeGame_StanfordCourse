@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     
-    var emojis = ["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽", "👃🏼", "👣", "💀", "☠️"]
     @State var emojiCount = 10
     
     var body: some View {
@@ -22,13 +21,6 @@ struct ContentView: View {
                     }
                 }
                 .padding()
-            }
-            
-            Spacer()
-            HStack{
-                remove
-                Spacer()
-                add
             }
             .padding()
             .font(.largeTitle)

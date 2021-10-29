@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
+    var emojis = ["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽", "👃🏼", "👣", "💀", "☠️", "👽", "👾", "🤖", "🎃", "😺", "😡", "🥳"]
     @State var emojiCount = 10
     
     var body: some View {

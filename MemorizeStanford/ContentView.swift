@@ -12,20 +12,44 @@ struct ContentView: View {
     @ObservedObject var viewModel : EmojiMemoryGame
     
     var body: some View {
+        TabView {
+            GameBoard(cards: viewModel.cards) { tappedCard in
+                viewModel.choose(tappedCard)
+            }
+            .padding()
+            .tabItem {
+                Label("Halloween", systemImage: "person")
+                    .foregroundColor(.blue)
+            }
+            
+            GameBoard(cards: viewModel.cards) { tappedCard in
+                viewModel.choose(tappedCard)
+            }
+            .tabItem {
+                Label("Vehicles", systemImage: "car")
+            }
+        }
+        .navigationBarTitleDisplayMode(.large)
+    }
+}
+
+struct GameBoard: View {
+    
+    var cards      : [MemoryGame<String>.Card]
+    var cardTapped : (MemoryGame<String>.Card) -> Void
+    
+    var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                ForEach(viewModel.cards) { card in
+                ForEach(cards) { card in
                     CardView(card: card)
                         .aspectRatio(2/3, contentMode: .fit)
                         .onTapGesture {
-                            viewModel.choose(card)
+                            cardTapped(card)
                         }
                 }
             }
-            .padding()
         }
-        .padding()
-        .font(.largeTitle)
     }
 }
 
@@ -46,6 +70,7 @@ struct CardView: View {
                     .padding()
                     .foregroundColor(.pink)
                     .font(.largeTitle)
+                    
             } else {
                 shape
                     .fill()
@@ -58,6 +83,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
         ContentView(viewModel: game)
-            .preferredColorScheme(.dark)
+            .preferredColorScheme(.light)
     }
 }

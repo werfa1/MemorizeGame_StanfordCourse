@@ -9,24 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var viewModel : EmojiMemoryGame
+    @ObservedObject var viewModel = EmojiMemoryGame()
     
     var body: some View {
-        TabView {
-            GameBoard(cards: viewModel.cards) { tappedCard in
-                viewModel.choose(tappedCard)
-            }
-            .padding()
-            .tabItem {
-                Label("Halloween", systemImage: "person")
-                    .foregroundColor(.blue)
-            }
+        TabView(selection: $viewModel.selectedThemeIndex) {
             
-            GameBoard(cards: viewModel.cards) { tappedCard in
-                viewModel.choose(tappedCard)
-            }
-            .tabItem {
-                Label("Vehicles", systemImage: "car")
+            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
+                GameBoard(cards: viewModel.publishedCards) { tappedCard in
+                    viewModel.choose(tappedCard)
+                }
+                .padding()
+                .tabItem {
+                    Label("Halloween", systemImage: "person")
+                        .foregroundColor(.blue)
+                }
             }
         }
         .navigationBarTitleDisplayMode(.large)

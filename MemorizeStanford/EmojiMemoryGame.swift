@@ -14,17 +14,23 @@ final class EmojiMemoryGame: ObservableObject {
                          ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚜"],
                          ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️"]]
     
-    @Published private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4) { index in
-        return emojis[index]
-    }
+    @Published var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4) { index in emojis[index] }
+
+    @Published var selectedThemeIndex: Int = 0 { didSet {
+        print("sekected index: \(selectedThemeIndex)")
+        let emojiTheme = EmojiMemoryGame.emojis[selectedThemeIndex]
+        publishedCards = emojiTheme.enumerated().map { index, emoji in MemoryGame.Card(id: Int.random(in: 0..<228), isFaceUp: false, isMatched: false, content: emoji) }
+    }}
+    @Published var publishedCards: Array<MemoryGame<String>.Card> = []
     
     var cards: Array<MemoryGame<String>.Card> {
-        return model.cards
+        model.cards
     }
     
     //MARK: - Intent(s) -
     
     func choose(_ card: MemoryGame<String>.Card) {
-        model.choose(card)
+        let foundIndex = publishedCards.firstIndex(where: { $0.id == card.id })!
+        publishedCards[foundIndex].isFaceUp.toggle()
     }
 }

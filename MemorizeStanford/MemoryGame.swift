@@ -22,9 +22,9 @@ struct MemoryGame<CardContent> {
     
     //MARK: - Initialisation -
     
-    init(numberOfPairsOfCards: Int, createCardContent: ((Int) -> [CardContent])) {
+    init(numberOfPairsOfCards: Int, createCardContent: (Int) -> [CardContent]) {
         
-        cards = Array<Card>()
+        cards = [Card]()
         
         for pairIndex in 0..<numberOfPairsOfCards {
             let content = createCardContent(pairIndex)

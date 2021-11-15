@@ -17,7 +17,6 @@ struct MemoryGame<CardContent> {
     var themeImageName : String!
     
     private (set) var visibleCards: [Card]
-    private var allCards : [Card]!
     
     struct Card : Identifiable {
         var id        : Int
@@ -48,7 +47,6 @@ extension MemoryGame {
     
     mutating func changeGameTheme(_ gameInfo: GameInformation, numberOfPairsOfCards: Int) {
         
-        allCards = []
         visibleCards = []
         
         themeName = gameInfo.themeName

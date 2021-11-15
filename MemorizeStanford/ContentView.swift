@@ -11,9 +11,12 @@ struct ContentView: View {
     
     @ObservedObject var viewModel = EmojiMemoryGame()
     
+    @State var isGameStarted = false
+    
     var body: some View {
         
         NavigationView {
+            
             TabView(selection: $viewModel.selectedThemeIndex) {
                 
                 ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
@@ -29,7 +32,7 @@ struct ContentView: View {
             }
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(Text("Memorize!"))
-        } 
+        }
     }
 }
 

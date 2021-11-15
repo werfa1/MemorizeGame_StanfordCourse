@@ -7,11 +7,17 @@
 
 import Foundation
 
+
+
 struct MemoryGame<CardContent> {
     
     //MARK: - Properties -
     
-    private (set) var cards: [Card]
+    var themeName      : String!
+    var themeImageName : String!
+    
+    private (set) var visibleCards: [Card]
+    private var allCards : [Card]!
     
     struct Card : Identifiable {
         var id        : Int
@@ -20,17 +26,19 @@ struct MemoryGame<CardContent> {
         var content   : CardContent
     }
     
+    struct GameInformation {
+        let themeName      : String
+        let themeImageName : String
+        let cardContent    : [CardContent]
+    }
+    
     //MARK: - Initialisation -
     
-    init(numberOfPairsOfCards: Int, createCardContent: (Int) -> [CardContent]) {
+    init(numberOfPairsOfCards: Int, gameInformation: GameInformation) {
         
-        cards = [Card]()
+        visibleCards = [Card]()
         
-        for pairIndex in 0..<numberOfPairsOfCards {
-            let content = createCardContent(pairIndex)
-            cards.append(Card(id: 2 * pairIndex, content: content[pairIndex]))
-            cards.append(Card(id: 2 * pairIndex + 1, content: content[pairIndex]))
-        }
+        changeGameTheme(gameInformation, numberOfPairsOfCards: numberOfPairsOfCards)
     }
 }
 
@@ -38,14 +46,30 @@ struct MemoryGame<CardContent> {
 
 extension MemoryGame {
     
+    mutating func changeGameTheme(_ gameInfo: GameInformation, numberOfPairsOfCards: Int) {
+        
+        allCards = []
+        visibleCards = []
+        
+        themeName = gameInfo.themeName
+        themeImageName = gameInfo.themeImageName
+        
+        for contentId in 0..<numberOfPairsOfCards {
+            visibleCards.append(Card(id: 2 * contentId, content: gameInfo.cardContent[contentId]))
+            visibleCards.append(Card(id: 2 * contentId + 1, content: gameInfo.cardContent[contentId]))
+        }
+        
+        visibleCards.shuffle()
+    }
+    
     mutating func choose(_ card: Card) {
         let cardIndex = index(of: card)
-        cards[cardIndex].isFaceUp.toggle()
+        visibleCards[cardIndex].isFaceUp.toggle()
     }
     
     func index(of card: Card) -> Int {
-        for index in 0..<cards.count {
-            if cards[index].id == card.id {
+        for index in 0..<visibleCards.count {
+            if visibleCards[index].id == card.id {
                 return index
             }
         }

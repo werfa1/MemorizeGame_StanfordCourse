@@ -12,20 +12,24 @@ struct ContentView: View {
     @ObservedObject var viewModel = EmojiMemoryGame()
     
     var body: some View {
-        TabView(selection: $viewModel.selectedThemeIndex) {
-            
-            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
-                GameBoard(cards: viewModel.publishedCards) { tappedCard in
-                    viewModel.choose(tappedCard)
-                }
-                .padding()
-                .tabItem {
-                    Label("Halloween", systemImage: "person")
-                        .foregroundColor(.blue)
+        
+        NavigationView {
+            TabView(selection: $viewModel.selectedThemeIndex) {
+                
+                ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
+                    GameBoard(cards: viewModel.publishedCards) { tappedCard in
+                        viewModel.choose(tappedCard)
+                    }
+                    .padding()
+                    .tabItem {
+                        Label(EmojiMemoryGame.themeNames[sectionIndex], systemImage: EmojiMemoryGame.themeImagesNames[sectionIndex])
+                            .foregroundColor(.blue)
+                    }
                 }
             }
-        }
-        .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle(Text("Memorize!"))
+        } 
     }
 }
 
@@ -70,6 +74,7 @@ struct CardView: View {
             } else {
                 shape
                     .fill()
+                    .foregroundColor(.mint)
             }
         }
     }
@@ -79,6 +84,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
         ContentView(viewModel: game)
-            .preferredColorScheme(.light)
+            .preferredColorScheme(.dark)
     }
 }

@@ -10,22 +10,36 @@ import SwiftUI
 final class EmojiMemoryGame: ObservableObject {
     
     static let emojis = [["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽"],
-                         ["💀", "☠️", "👽", "👾", "🤖", "🎃", "😺", "😡", "🥳"],
                          ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚜"],
                          ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️"]]
     
-    @Published var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4) { index in emojis[index] }
-
-    @Published var selectedThemeIndex: Int = 0 { didSet {
-        print("sekected index: \(selectedThemeIndex)")
-        let emojiTheme = EmojiMemoryGame.emojis[selectedThemeIndex]
-        publishedCards = emojiTheme.enumerated().map { index, emoji in MemoryGame.Card(id: Int.random(in: 0..<228), isFaceUp: false, isMatched: false, content: emoji) }
-    }}
-    @Published var publishedCards: Array<MemoryGame<String>.Card> = []
+    static let themeNames = ["Body", "Cars", "Animals"]
+    static let themeImagesNames = ["person", "car", "pawprint.fill"]
     
-    var cards: Array<MemoryGame<String>.Card> {
-        model.cards
+    var model: MemoryGame<String> = MemoryGame<String>(
+        numberOfPairsOfCards: 9,
+        gameInformation: MemoryGame<String>.GameInformation(
+            themeName: EmojiMemoryGame.themeNames[0],
+            themeImageName: EmojiMemoryGame.themeImagesNames[0],
+            cardContent: EmojiMemoryGame.emojis[0]
+        )
+    )
+
+    @Published var selectedThemeIndex: Int = -1 {
+        didSet {
+            model.changeGameTheme(
+                MemoryGame<String>.GameInformation(
+                    themeName: EmojiMemoryGame.themeNames[selectedThemeIndex],
+                    themeImageName: EmojiMemoryGame.themeImagesNames[selectedThemeIndex],
+                    cardContent: EmojiMemoryGame.emojis[selectedThemeIndex]
+                ),
+                numberOfPairsOfCards: 9
+            )
+            publishedCards = model.visibleCards
+        }
     }
+    
+    @Published var publishedCards: Array<MemoryGame<String>.Card> = []
     
     //MARK: - Intent(s) -
     

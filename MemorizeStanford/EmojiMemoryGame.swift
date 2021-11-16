@@ -9,6 +9,8 @@ import SwiftUI
 
 final class EmojiMemoryGame: ObservableObject {
     
+    //MARK: - Static Properties -
+    
     static let emojis = [["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽"],
                          ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚜"],
                          ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️"]]
@@ -16,9 +18,15 @@ final class EmojiMemoryGame: ObservableObject {
     static let themeNames = ["Body", "Cars", "Animals"]
     static let themeImagesNames = ["person", "car", "pawprint.fill"]
     
-    var model: MemoryGame<String>
+    //MARK: - Published Properties -
+    
+    @Published var model: MemoryGame<String>
+    
+    //MARK: - Properties -
+    
+    private var numberOfPairsOfCards: Int = 5
 
-    @Published var selectedThemeIndex: Int = 0 {
+    var selectedThemeIndex: Int = 0 {
         didSet {
             model.changeGameTheme(
                 MemoryGame<String>.GameInformation(
@@ -26,19 +34,20 @@ final class EmojiMemoryGame: ObservableObject {
                     themeImageName: EmojiMemoryGame.themeImagesNames[selectedThemeIndex],
                     cardContent: EmojiMemoryGame.emojis[selectedThemeIndex]
                 ),
-                numberOfPairsOfCards: 9
+                numberOfPairsOfCards: numberOfPairsOfCards
             )
-            publishedCards = model.visibleCards
         }
     }
     
-    @Published var publishedCards: Array<MemoryGame<String>.Card>
+    var publishedCards: Array<MemoryGame<String>.Card> {
+        return model.visibleCards
+    }
     
     //MARK: - Initialisation -
     
     init(){
         let gameModel = MemoryGame<String>(
-            numberOfPairsOfCards: 9,
+            numberOfPairsOfCards: numberOfPairsOfCards,
             gameInformation: MemoryGame<String>.GameInformation(
                 themeName: EmojiMemoryGame.themeNames.first!,
                 themeImageName: EmojiMemoryGame.themeImagesNames.first!,
@@ -46,13 +55,11 @@ final class EmojiMemoryGame: ObservableObject {
             )
         )
         model = gameModel
-        publishedCards = gameModel.visibleCards
     }
     
     //MARK: - Intent(s) -
     
     func choose(_ card: MemoryGame<String>.Card) {
-        let foundIndex = publishedCards.firstIndex(where: { $0.id == card.id })!
-        publishedCards[foundIndex].isFaceUp.toggle()
+        model.choose(card)
     }
 }

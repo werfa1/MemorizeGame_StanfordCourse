@@ -16,18 +16,14 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView {
-            
-            TabView(selection: $viewModel.selectedThemeIndex) {
-                
-                ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
-                    GameBoard(cards: viewModel.publishedCards) { tappedCard in
-                        viewModel.choose(tappedCard)
-                    }
-                    .padding()
-                    .tabItem {
-                        Label(EmojiMemoryGame.themeNames[sectionIndex], systemImage: EmojiMemoryGame.themeImagesNames[sectionIndex])
-                            .foregroundColor(.blue)
-                    }
+            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
+                GameBoard(cards: viewModel.publishedCards) { tappedCard in
+                    viewModel.choose(tappedCard)
+                }
+                .padding()
+                .tabItem {
+                    Label(EmojiMemoryGame.themeNames[sectionIndex], systemImage: EmojiMemoryGame.themeImagesNames[sectionIndex])
+                        .foregroundColor(.blue)
                 }
             }
             .navigationBarTitleDisplayMode(.large)

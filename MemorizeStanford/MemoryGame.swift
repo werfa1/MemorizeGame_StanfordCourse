@@ -5,17 +5,15 @@
 //  Created by Pavel Otverchenko on 29.10.2021.
 //
 
-import Foundation
 import SwiftUI
-
-
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
     
     //MARK: - Properties -
     
-    var themeName      : String!
-    var themeImageName : String!
+    var themeName: String!
+    var themeImageName: String!
+    var numberOfPairs: Int!
     
     private (set) var visibleCards: [Card]
     
@@ -24,25 +22,26 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     //MARK: - Nested Structures -
     
     struct Card : Identifiable {
-        var id        : Int
-        var isFaceUp  : Bool = false
+        var id : Int
+        var isFaceUp : Bool = false
         var isMatched : Bool = false
-        var content   : CardContent
+        var content : CardContent
     }
     
     struct GameInformation {
-        let themeName      : String
+        let themeName : String
         let themeImageName : String
-        let cardContent    : [CardContent]
+        let cardContent : [String]
+        let numberOfPairs: Int
     }
     
     //MARK: - Initialisation -
     
-    init(numberOfPairsOfCards: Int, gameInformation: GameInformation) {
+    init(gameInformation: Theme) {
         
         visibleCards = [Card]()
         
-        changeGameTheme(gameInformation, numberOfPairsOfCards: numberOfPairsOfCards)
+        setGameTheme(gameInformation)
     }
 }
 
@@ -50,21 +49,23 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 
 extension MemoryGame {
     
-    mutating func changeGameTheme(_ gameInfo: GameInformation, numberOfPairsOfCards: Int) {
+    mutating func setGameTheme(_ gameInfo: Theme) {
         
         visibleCards = []
         
         themeName = gameInfo.themeName
         themeImageName = gameInfo.themeImageName
+        numberOfPairs = gameInfo.numberOfPairs
         
-        for contentId in 0..<numberOfPairsOfCards {
-            visibleCards.append(Card(id: 2 * contentId, content: gameInfo.cardContent[contentId]))
-            visibleCards.append(Card(id: 2 * contentId + 1, content: gameInfo.cardContent[contentId]))
+        for contentId in 0..<numberOfPairs {
+            visibleCards.append(Card(id: 2 * contentId, content: gameInfo.cardContent[contentId] as! CardContent))
+            visibleCards.append(Card(id: 2 * contentId + 1, content: gameInfo.cardContent[contentId] as! CardContent))
         }
         
         visibleCards.shuffle()
     }
     
+    /// Implements the process of picking the card
     mutating func choose(_ card: Card) {
         guard let cardIndex = index(of: card) else { return }
         guard !visibleCards[cardIndex].isFaceUp else { return }

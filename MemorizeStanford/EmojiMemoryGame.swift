@@ -17,6 +17,7 @@ final class EmojiMemoryGame: ObservableObject {
     
     static let themeNames = ["Body", "Cars", "Animals"]
     static let themeImagesNames = ["person", "car", "pawprint.fill"]
+    static let themeColors = ["orange", "purple", "pink", "blue", "red", "yellow"]
     
     //MARK: - Published Properties -
     
@@ -25,16 +26,17 @@ final class EmojiMemoryGame: ObservableObject {
     //MARK: - Properties -
     
     private var numberOfPairsOfCards: Int = 5
-
+    
     var selectedThemeIndex: Int = 0 {
         didSet {
-            model.changeGameTheme(
-                MemoryGame<String>.GameInformation(
+            model.setGameTheme(
+                Theme (
                     themeName: EmojiMemoryGame.themeNames[selectedThemeIndex],
                     themeImageName: EmojiMemoryGame.themeImagesNames[selectedThemeIndex],
-                    cardContent: EmojiMemoryGame.emojis[selectedThemeIndex]
-                ),
-                numberOfPairsOfCards: numberOfPairsOfCards
+                    cardContent: EmojiMemoryGame.emojis[selectedThemeIndex],
+                    numberOfPairs: numberOfPairsOfCards,
+                    color: EmojiMemoryGame.themeColors[selectedThemeIndex]
+                )
             )
         }
     }
@@ -47,11 +49,12 @@ final class EmojiMemoryGame: ObservableObject {
     
     init(){
         let gameModel = MemoryGame<String>(
-            numberOfPairsOfCards: numberOfPairsOfCards,
-            gameInformation: MemoryGame<String>.GameInformation(
+            gameInformation: Theme (
                 themeName: EmojiMemoryGame.themeNames.first!,
                 themeImageName: EmojiMemoryGame.themeImagesNames.first!,
-                cardContent: EmojiMemoryGame.emojis.first!
+                cardContent: EmojiMemoryGame.emojis.first!,
+                numberOfPairs: numberOfPairsOfCards,
+                color: EmojiMemoryGame.themeColors.first!
             )
         )
         model = gameModel

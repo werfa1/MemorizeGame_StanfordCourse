@@ -16,16 +16,23 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView {
-            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
-                GameBoard(cards: viewModel.publishedCards) { tappedCard in
-                    viewModel.choose(tappedCard)
-                }
-                .padding()
-                .tabItem {
-                    Label(EmojiMemoryGame.themeNames[sectionIndex], systemImage: EmojiMemoryGame.themeImagesNames[sectionIndex])
-                        .foregroundColor(.blue)
-                }
+            VStack {
+                Text("Text")
+                    .padding()
+                
+                Text("Text")
+                    .padding()
+                
+                Text("Text")
+                    .padding()
             }
+            
+//            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
+//                GameBoard(cards: viewModel.publishedCards) { tappedCard in
+//                    viewModel.choose(tappedCard)
+//                }
+//                .padding()
+//            }
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(Text("Memorize!"))
         }
@@ -34,7 +41,7 @@ struct ContentView: View {
 
 struct GameBoard: View {
     
-    var cards      : [MemoryGame<String>.Card]
+    var cards : [MemoryGame<String>.Card]
     var cardTapped : (MemoryGame<String>.Card) -> Void
     
     var body: some View {

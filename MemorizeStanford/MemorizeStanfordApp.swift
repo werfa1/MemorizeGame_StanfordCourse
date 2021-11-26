@@ -14,7 +14,8 @@ struct MemorizeStanfordApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: game)
+//            ContentView(viewModel: game)
+            StarterMenuView(viewModel: game, themes: EmojiMemoryGame.allThemes)
         }
     }
 }

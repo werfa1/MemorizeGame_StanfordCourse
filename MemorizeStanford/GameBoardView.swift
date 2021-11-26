@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  GameBoardView.swift
 //  MemorizeStanford
 //
 //  Created by Pavel Otverchenko on 27.10.2021.
@@ -7,35 +7,16 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct GameBoardView: View {
     
     @ObservedObject var viewModel : EmojiMemoryGame
     
-    @State var isGameStarted = false
-    
     var body: some View {
         
-        NavigationView {
-            VStack {
-                Text("Text")
-                    .padding()
-                
-                Text("Text")
-                    .padding()
-                
-                Text("Text")
-                    .padding()
-            }
-            
-//            ForEach(0..<EmojiMemoryGame.emojis.count) { sectionIndex in
-//                GameBoard(cards: viewModel.publishedCards) { tappedCard in
-//                    viewModel.choose(tappedCard)
-//                }
-//                .padding()
-//            }
-            .navigationBarTitleDisplayMode(.large)
-            .navigationTitle(Text("Memorize!"))
+        GameBoard(cards: viewModel.publishedCards) { tappedCard in
+            viewModel.choose(tappedCard)
         }
+        .padding(.horizontal)
     }
 }
 
@@ -89,7 +70,7 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        ContentView(viewModel: game)
+        GameBoardView(viewModel: game)
             .preferredColorScheme(.dark)
     }
 }

@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Theme {
+struct Theme : Identifiable {
+    let id: Int
     let themeName: String
     let themeImageName: String
     let cardContent : [String]

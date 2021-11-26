@@ -11,13 +11,24 @@ final class EmojiMemoryGame: ObservableObject {
     
     //MARK: - Static Properties -
     
-    static let emojis = [["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽"],
-                         ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚜"],
-                         ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️"]]
-    
-    static let themeNames = ["Body", "Cars", "Animals"]
-    static let themeImagesNames = ["person", "car", "pawprint.fill"]
-    static let themeColors = ["orange", "purple", "pink", "blue", "red", "yellow"]
+    static let allThemes = [Theme(id: 0,
+                                  themeName: "Body",
+                                  themeImageName: "person",
+                                  cardContent: ["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽"],
+                                  numberOfPairs: 5,
+                                  color: "orange"),
+                            Theme(id: 1,
+                                  themeName: "Cars",
+                                  themeImageName: "car",
+                                  cardContent: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚜"],
+                                  numberOfPairs: 4,
+                                  color: "purple"),
+                            Theme(id: 2,
+                                  themeName: "Animals",
+                                  themeImageName: "pawprint.fill",
+                                  cardContent: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️"],
+                                  numberOfPairs: 3,
+                                  color: "pink")]
     
     //MARK: - Published Properties -
     
@@ -31,11 +42,12 @@ final class EmojiMemoryGame: ObservableObject {
         didSet {
             model.setGameTheme(
                 Theme (
-                    themeName: EmojiMemoryGame.themeNames[selectedThemeIndex],
-                    themeImageName: EmojiMemoryGame.themeImagesNames[selectedThemeIndex],
-                    cardContent: EmojiMemoryGame.emojis[selectedThemeIndex],
-                    numberOfPairs: numberOfPairsOfCards,
-                    color: EmojiMemoryGame.themeColors[selectedThemeIndex]
+                    id: EmojiMemoryGame.allThemes[selectedThemeIndex].id,
+                    themeName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeName,
+                    themeImageName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeImageName,
+                    cardContent: EmojiMemoryGame.allThemes[selectedThemeIndex].cardContent,
+                    numberOfPairs: EmojiMemoryGame.allThemes[selectedThemeIndex].numberOfPairs,
+                    color: EmojiMemoryGame.allThemes[selectedThemeIndex].color
                 )
             )
         }
@@ -50,11 +62,12 @@ final class EmojiMemoryGame: ObservableObject {
     init(){
         let gameModel = MemoryGame<String>(
             gameInformation: Theme (
-                themeName: EmojiMemoryGame.themeNames.first!,
-                themeImageName: EmojiMemoryGame.themeImagesNames.first!,
-                cardContent: EmojiMemoryGame.emojis.first!,
-                numberOfPairs: numberOfPairsOfCards,
-                color: EmojiMemoryGame.themeColors.first!
+                id: EmojiMemoryGame.allThemes[selectedThemeIndex].id,
+                themeName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeName,
+                themeImageName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeImageName,
+                cardContent: EmojiMemoryGame.allThemes[selectedThemeIndex].cardContent,
+                numberOfPairs: EmojiMemoryGame.allThemes[selectedThemeIndex].numberOfPairs,
+                color: EmojiMemoryGame.allThemes[selectedThemeIndex].color
             )
         )
         model = gameModel

@@ -10,23 +10,22 @@ import SwiftUI
 struct GameBoardView: View {
     
     @ObservedObject var viewModel : EmojiMemoryGame
+    var themeIndex: Int
     
     var body: some View {
         
         VStack {
-            GameBoard(cards: viewModel.publishedCards) { tappedCard in
-                viewModel.choose(tappedCard)
+            GameBoard(cards: viewModel.model[themeIndex].visibleCards, themeColor: viewModel.getThemeColor(atIndex: themeIndex)) { tappedCard in
+                viewModel.choose(tappedCard, themeIndex: themeIndex)
             }
             
             Spacer()
             
             Button(action: {
-                print("start new game")
-                viewModel.startNewGame()
+                viewModel.startNewGameForModelAt(index: themeIndex)
             }, label: {
                 Text("New Game")
                     .frame(width: 200, height: 50)
-                    .clipped()
                     .foregroundColor(.white)
                     .background(Color.red)
                     .cornerRadius(10)
@@ -38,14 +37,16 @@ struct GameBoardView: View {
 
 struct GameBoard: View {
     
-    var cards : [MemoryGame<String>.Card]
-    var cardTapped : (MemoryGame<String>.Card) -> Void
+    let cards: [MemoryGame<String>.Card]
+    let themeColor: Color?
+    let cardTapped: (MemoryGame<String>.Card) -> Void
     
     var body: some View {
+        
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
                 ForEach(cards) { card in
-                    CardView(card: card)
+                    CardView(card: card, themeColor: themeColor ?? .gray)
                         .aspectRatio(2/3, contentMode: .fit)
                         .onTapGesture {
                             cardTapped(card)
@@ -59,6 +60,7 @@ struct GameBoard: View {
 struct CardView: View {
     
     let card: MemoryGame<String>.Card
+    let themeColor: Color
     
     var body: some View {
         ZStack {
@@ -72,21 +74,14 @@ struct CardView: View {
                 Text(card.content)
                     .padding()
                     .foregroundColor(.pink)
-                    .font(.largeTitle)
+                    .font(.title)
                     
             } else {
                 shape
                     .fill()
-                    .foregroundColor(.mint)
+                    .foregroundColor(themeColor)
             }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let game = EmojiMemoryGame()
-        GameBoardView(viewModel: game)
-            .preferredColorScheme(.dark)
+        .opacity(card.isMatched ? 0 : 1)
     }
 }

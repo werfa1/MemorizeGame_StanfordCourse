@@ -9,6 +9,8 @@ import SwiftUI
 
 final class EmojiMemoryGame: ObservableObject {
     
+    typealias Card = MemoryGame<String>.Card
+    
     //MARK: - Static Properties -
     
     static let allThemes = [
@@ -56,7 +58,7 @@ final class EmojiMemoryGame: ObservableObject {
             id: 5,
             themeName: "Food",
             themeImageName: "cart",
-            cardContent: ["🍏", " 🍐", "🍌", "🍓", "🍉", "🥥", "🥑", "🫒", "🍑"],
+            cardContent: ["🍏", "🍆", "🍌", "🍓", "🍉", "🥥", "🥑", "🫒", "🍑"],
             numberOfPairs: 5,
             color: "blue"
         )
@@ -64,60 +66,39 @@ final class EmojiMemoryGame: ObservableObject {
     
     //MARK: - Published Properties -
     
-    @Published var model: MemoryGame<String>
+    @Published var model = [MemoryGame<String>]()
     
     //MARK: - Properties -
     
-    private var numberOfPairsOfCards: Int = 5
+    private var numberOfPairsOfCards = 5
     
-    var selectedThemeIndex: Int = 0 {
+    var selectedThemeIndex = 0 {
         didSet {
-            model.setGameTheme(
-                Theme (
-                    id: EmojiMemoryGame.allThemes[selectedThemeIndex].id,
-                    themeName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeName,
-                    themeImageName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeImageName,
-                    cardContent: EmojiMemoryGame.allThemes[selectedThemeIndex].cardContent,
-                    numberOfPairs: EmojiMemoryGame.allThemes[selectedThemeIndex].numberOfPairs,
-                    color: EmojiMemoryGame.allThemes[selectedThemeIndex].color
-                )
-            )
+            model[selectedThemeIndex].setGameTheme(EmojiMemoryGame.allThemes[selectedThemeIndex])
         }
-    }
-    
-    var publishedCards: Array<MemoryGame<String>.Card> {
-        return model.visibleCards
     }
     
     //MARK: - Initialisation -
     
     init(){
-        let gameModel = MemoryGame<String>(
-            gameInformation: Theme (
-                id: EmojiMemoryGame.allThemes[selectedThemeIndex].id,
-                themeName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeName,
-                themeImageName: EmojiMemoryGame.allThemes[selectedThemeIndex].themeImageName,
-                cardContent: EmojiMemoryGame.allThemes[selectedThemeIndex].cardContent,
-                numberOfPairs: EmojiMemoryGame.allThemes[selectedThemeIndex].numberOfPairs,
-                color: EmojiMemoryGame.allThemes[selectedThemeIndex].color
-            )
-        )
-        model = gameModel
+        for index in EmojiMemoryGame.allThemes.indices {
+            model.append(MemoryGame<String>(gameInformation: EmojiMemoryGame.allThemes[index]))
+        }
     }
     
     //MARK: - Intent(s) -
     
-    func choose(_ card: MemoryGame<String>.Card) {
-        model.choose(card)
+    func choose(_ card: Card, themeIndex: Int) {
+        model[themeIndex].choose(card)
     }
     
-    func startNewGame() {
+    func startNewGameForModelAt(index: Int) {
         let newThemeIndex = Int.random(in: 0..<EmojiMemoryGame.allThemes.count)
-        model.setGameTheme(EmojiMemoryGame.allThemes[newThemeIndex])
+        model[index].setGameTheme(EmojiMemoryGame.allThemes[newThemeIndex])
     }
     
-    func getThemeColor() -> Color? {
-        let currentTheme = EmojiMemoryGame.allThemes[selectedThemeIndex]
+    func getThemeColor(atIndex index: Int) -> Color? {
+        let currentTheme = EmojiMemoryGame.allThemes[index]
         switch currentTheme.color {
         case "pink" :
             return .pink

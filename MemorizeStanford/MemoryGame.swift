@@ -14,6 +14,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     var themeName: String!
     var themeImageName: String!
     var numberOfPairs: Int!
+    var themeColor: String!
     
     private (set) var visibleCards: [Card]
     
@@ -22,17 +23,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     //MARK: - Nested Structures -
     
     struct Card : Identifiable {
-        var id : Int
-        var isFaceUp : Bool = false
-        var isMatched : Bool = false
-        var content : CardContent
-    }
-    
-    struct GameInformation {
-        let themeName : String
-        let themeImageName : String
-        let cardContent : [String]
-        let numberOfPairs: Int
+        let id: Int
+        var isFaceUp = false
+        var isMatched = false
+        let content: CardContent
     }
     
     //MARK: - Initialisation -
@@ -52,10 +46,12 @@ extension MemoryGame {
     mutating func setGameTheme(_ gameInfo: Theme) {
         
         visibleCards = []
+        indexOfFaceUpCard = nil
         
         themeName = gameInfo.themeName
         themeImageName = gameInfo.themeImageName
         numberOfPairs = gameInfo.numberOfPairs
+        themeColor = gameInfo.color
         
         for contentId in 0..<numberOfPairs {
             visibleCards.append(Card(id: 2 * contentId, content: gameInfo.cardContent[contentId] as! CardContent))

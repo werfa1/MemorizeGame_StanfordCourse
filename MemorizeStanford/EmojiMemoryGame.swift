@@ -19,8 +19,8 @@ final class EmojiMemoryGame: ObservableObject {
             themeName: "Body",
             themeImageName: "person",
             cardContent: ["👁", "👀", "🫀", "🫁", "🧠", "👄", "🦷", "👅", "👂🏽"],
-            numberOfPairs: 9,
-            color: "orange"
+            numberOfPairs: 15,
+            color: "red"
         ),
         Theme(
             id: 1,
@@ -98,8 +98,8 @@ final class EmojiMemoryGame: ObservableObject {
     }
     
     func getThemeColor(atIndex index: Int) -> Color? {
-        let currentTheme = EmojiMemoryGame.allThemes[index]
-        switch currentTheme.color {
+        let currentThemeColor = model[index].themeColor
+        switch currentThemeColor {
         case "pink" :
             return .pink
         case "blue":

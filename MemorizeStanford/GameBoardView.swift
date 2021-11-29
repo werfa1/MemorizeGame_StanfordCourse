@@ -21,16 +21,25 @@ struct GameBoardView: View {
             
             Spacer()
             
-            Button(action: {
-                viewModel.startNewGameForModelAt(index: themeIndex)
-            }, label: {
-                Text("New Game")
-                    .frame(width: 200, height: 50)
-                    .foregroundColor(.white)
-                    .background(Color.red)
-                    .cornerRadius(10)
-            })
+            HStack {
+                
+                Text("Score: 0")
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                Button(action: {
+                    viewModel.startNewGameForModelAt(index: themeIndex)
+                }, label: {
+                    Text("New Game")
+                        .frame(width: 200, height: 50)
+                        .foregroundColor(.white)
+                        .background(viewModel.getThemeColor(atIndex: themeIndex) ?? Color.red)
+                        .cornerRadius(10)
+                })
+            }
         }
+        .navigationTitle(viewModel.model[themeIndex].themeName)
         .padding()
     }
 }
@@ -85,3 +94,14 @@ struct CardView: View {
         .opacity(card.isMatched ? 0 : 1)
     }
 }
+
+
+struct ContentView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        let model = EmojiMemoryGame()
+
+        GameBoardView(viewModel: model, themeIndex: 0)
+    }
+}
+

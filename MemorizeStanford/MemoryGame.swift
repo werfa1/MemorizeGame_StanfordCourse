@@ -50,12 +50,19 @@ extension MemoryGame {
         
         themeName = gameInfo.themeName
         themeImageName = gameInfo.themeImageName
-        numberOfPairs = gameInfo.numberOfPairs
+        if gameInfo.numberOfPairs <= gameInfo.cardContent.count {
+            numberOfPairs = gameInfo.numberOfPairs
+        } else {
+            numberOfPairs = gameInfo.cardContent.count
+        }
+        
         themeColor = gameInfo.color
         
+        let shuffledCardContent = gameInfo.cardContent.shuffled()
+        
         for contentId in 0..<numberOfPairs {
-            visibleCards.append(Card(id: 2 * contentId, content: gameInfo.cardContent[contentId] as! CardContent))
-            visibleCards.append(Card(id: 2 * contentId + 1, content: gameInfo.cardContent[contentId] as! CardContent))
+            visibleCards.append(Card(id: 2 * contentId, content: shuffledCardContent[contentId] as! CardContent))
+            visibleCards.append(Card(id: 2 * contentId + 1, content: shuffledCardContent[contentId] as! CardContent))
         }
         
         visibleCards.shuffle()

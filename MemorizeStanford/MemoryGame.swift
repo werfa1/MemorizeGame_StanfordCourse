@@ -17,8 +17,15 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     var themeColor: String!
     
     private (set) var visibleCards: [Card]
+    private var alreadySeenCards: [Card] = []
     
     private var indexOfFaceUpCard: Int?
+    
+    private var score = 0 {
+        didSet {
+            print(score)
+        }
+    }
     
     //MARK: - Nested Structures -
     
@@ -72,18 +79,25 @@ extension MemoryGame {
     mutating func choose(_ card: Card) {
         guard let cardIndex = index(of: card) else { return }
         guard !visibleCards[cardIndex].isFaceUp else { return }
+        
         if let potentialMatchIndex = indexOfFaceUpCard {
             if visibleCards[cardIndex].content == visibleCards[potentialMatchIndex].content {
                 visibleCards[cardIndex].isMatched = true
                 visibleCards[potentialMatchIndex].isMatched = true
+                score += 2
+            } else {
+                score -= 1
             }
+            
             indexOfFaceUpCard = nil
         } else {
             visibleCards.indices.forEach { cardIndex in
                 visibleCards[cardIndex].isFaceUp = false
             }
             indexOfFaceUpCard = cardIndex
+            
         }
+        alreadySeenCards.append(visibleCards[cardIndex])
         visibleCards[cardIndex].isFaceUp.toggle()
     }
     

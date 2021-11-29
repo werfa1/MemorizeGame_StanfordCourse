@@ -64,9 +64,9 @@
 				06761FDD27512F8100425115 /* StarterMenuView.swift */,
 				06BEF6BE272937580038F7E0 /* MemorizeStanfordApp.swift */,
 				067D0FB3272BD90D00C18FB3 /* MemoryGame.swift */,
+				0687660B274FED3700C96141 /* Theme.swift */,
 				06BEF6C2272937590038F7E0 /* Assets.xcassets */,
 				06BEF6C4272937590038F7E0 /* Preview Content */,
-				0687660B274FED3700C96141 /* Theme.swift */,
 			);
 			path = MemorizeStanford;
 			sourceTree = "<group>";

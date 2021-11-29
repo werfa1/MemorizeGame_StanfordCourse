@@ -72,12 +72,6 @@ final class EmojiMemoryGame: ObservableObject {
     
     private var numberOfPairsOfCards = 5
     
-    var selectedThemeIndex = 0 {
-        didSet {
-            model[selectedThemeIndex].setGameTheme(EmojiMemoryGame.allThemes[selectedThemeIndex])
-        }
-    }
-    
     //MARK: - Initialisation -
     
     init(){

@@ -78,4 +78,9 @@ final class EmojiMemoryGame: ObservableObject {
     func choose(_ card: MemoryGame<String>.Card) {
         model.choose(card)
     }
+    
+    func startNewGame() {
+        let newThemeIndex = Int.random(in: 0..<EmojiMemoryGame.allThemes.count)
+        model.setGameTheme(EmojiMemoryGame.allThemes[newThemeIndex])
+    }
 }

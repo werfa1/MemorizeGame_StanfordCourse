@@ -13,10 +13,26 @@ struct GameBoardView: View {
     
     var body: some View {
         
-        GameBoard(cards: viewModel.publishedCards) { tappedCard in
-            viewModel.choose(tappedCard)
+        VStack {
+            GameBoard(cards: viewModel.publishedCards) { tappedCard in
+                viewModel.choose(tappedCard)
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                print("start new game")
+                viewModel.startNewGame()
+            }, label: {
+                Text("New Game")
+                    .frame(width: 200, height: 50)
+                    .clipped()
+                    .foregroundColor(.white)
+                    .background(Color.red)
+                    .cornerRadius(10)
+            })
         }
-        .padding(.horizontal)
+        .padding()
     }
 }
 

@@ -21,11 +21,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     private var indexOfFaceUpCard: Int?
     
-    private var score = 0 {
-        didSet {
-            print(score)
-        }
-    }
+    var score = 0 
     
     //MARK: - Nested Structures -
     
@@ -54,6 +50,7 @@ extension MemoryGame {
         
         visibleCards = []
         indexOfFaceUpCard = nil
+        score = 0
         
         themeName = gameInfo.themeName
         themeImageName = gameInfo.themeImageName
@@ -86,7 +83,16 @@ extension MemoryGame {
                 visibleCards[potentialMatchIndex].isMatched = true
                 score += 2
             } else {
-                score -= 1
+                let alreadySeenIds = alreadySeenCards.map { $0.id }
+                score -= 1 + (alreadySeenIds.contains(visibleCards[cardIndex].id) ? 1 : 0) + (alreadySeenIds.contains(visibleCards[potentialMatchIndex].id) ? 1 : 0)
+            }
+            
+            if !alreadySeenCards.map({ $0.id }).contains(visibleCards[cardIndex].id) {
+                alreadySeenCards.append(visibleCards[cardIndex])
+            }
+            
+            if !alreadySeenCards.map({ $0.id }).contains(visibleCards[potentialMatchIndex].id) {
+                alreadySeenCards.append(visibleCards[indexOfFaceUpCard!])
             }
             
             indexOfFaceUpCard = nil
@@ -97,7 +103,7 @@ extension MemoryGame {
             indexOfFaceUpCard = cardIndex
             
         }
-        alreadySeenCards.append(visibleCards[cardIndex])
+        
         visibleCards[cardIndex].isFaceUp.toggle()
     }
     

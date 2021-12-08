@@ -23,7 +23,7 @@ struct GameBoardView: View {
             
             HStack {
                 
-                Text("Score: 0")
+                Text("Score: \(viewModel.model[themeIndex].score)")
                     .padding(.horizontal)
                 
                 Spacer()
